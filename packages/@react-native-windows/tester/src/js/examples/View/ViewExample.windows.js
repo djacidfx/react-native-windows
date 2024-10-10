@@ -469,7 +469,7 @@ function BoxShadowExample(): React.Node {
             borderRadius: 10,
             borderWidth: 5,
             borderColor: 'red',
-            experimental_boxShadow: '0 0 10px 0 black',
+            boxShadow: '0 0 10px 0 black',
           }}
         />
         <View
@@ -478,7 +478,7 @@ function BoxShadowExample(): React.Node {
             borderRadius: 30,
             borderWidth: 5,
             borderColor: 'red',
-            experimental_boxShadow: 'inset 0 0 10px 0 black',
+            boxShadow: 'inset 0 0 10px 0 black',
           }}
         />
         <View
@@ -487,7 +487,7 @@ function BoxShadowExample(): React.Node {
             borderRadius: 30,
             borderWidth: 5,
             borderColor: 'red',
-            experimental_boxShadow:
+            boxShadow:
               'inset 15px -5px 5px 5px cyan, inset 15px -5px 20px 10px orange, -5px 5px 5px 0px green, 0px -10px 0px 5px black',
           }}
         />
@@ -496,7 +496,7 @@ function BoxShadowExample(): React.Node {
         <View
           style={{
             ...defaultStyleSize,
-            experimental_boxShadow: '0px 0px 5px 5px black',
+            boxShadow: '0px 0px 5px 5px black',
           }}>
           <View
             style={{
@@ -511,7 +511,7 @@ function BoxShadowExample(): React.Node {
           style={{
             ...defaultStyleSize,
             backgroundColor: 'red',
-            experimental_boxShadow: 'inset 0px 0px 5px 5px black',
+            boxShadow: 'inset 0px 0px 5px 5px black',
           }}
         />
         <View style={{...defaultStyleSize, flexDirection: 'row'}}>
@@ -519,7 +519,7 @@ function BoxShadowExample(): React.Node {
           <View
             style={{
               ...defaultStyleSize,
-              experimental_boxShadow: ' 0px 0px 20px 5px black',
+              boxShadow: ' 0px 0px 20px 5px black',
             }}
           />
           <View style={{width: 25, height: 25, backgroundColor: 'cyan'}} />
@@ -530,7 +530,14 @@ function BoxShadowExample(): React.Node {
           style={{
             ...defaultStyleSize,
             backgroundColor: 'green',
-            experimental_boxShadow: '0px 10px',
+            boxShadow: '0px 10px',
+          }}
+        />
+        <View
+          style={{
+            ...defaultStyleSize,
+            backgroundColor: 'orange',
+            boxShadow: '5px 5px 5px 0px rgba(0, 0, 0, 0)',
           }}
         />
       </View>
@@ -544,6 +551,7 @@ class AccessibilityExample extends React.Component<
 > {
   state: {tap: number} = {
     tap: 0,
+    expanded: true,
   };
 
   render(): React.Node {
@@ -554,10 +562,10 @@ class AccessibilityExample extends React.Component<
         accessibilityRole="button"
         accessibilityValue={{now: this.state.tap}}
         accessibilityActions={[
-          {name: 'cut', label: 'cut'},
-          {name: 'copy', label: 'copy'},
-          {name: 'paste', label: 'paste'},
+          {name: 'expand', label: 'expand'},
+          {name: 'collapse', label: 'collapse'},
         ]}
+        accessibilityState={{expanded: this.state.expanded}}
         accessibilityPosInSet={1}
         accessibilitySetSize={1}
         accessibilityLiveRegion='polite'
@@ -566,19 +574,19 @@ class AccessibilityExample extends React.Component<
         focusable
         onAccessibilityAction={event => {
           switch (event.nativeEvent.actionName) {
-            case 'cut':
-              Alert.alert('Alert', 'cut action success');
+            case 'expand':
+              this.setState({expanded: true})
               break;
-            case 'copy':
-              Alert.alert('Alert', 'copy action success');
-              break;
-            case 'paste':
-              Alert.alert('Alert', 'paste action success');
-              break;
+            case 'collapse':
+              this.setState({expanded: false})
           }
         }}
         onAccessibilityTap={() => {
           this.setState({tap: this.state.tap + 1});
+        }}
+        onPress={()=>{
+          this.setState({expanded: !this.state.expanded});
+          console.log('Pressed');
         }}>
         <Text>A View with accessibility values.</Text>
         <Text>Current Number of Accessibility Taps: {this.state.tap}</Text>
